@@ -70,7 +70,7 @@ class BaseModel:
         dictionary = (self.__dict__)
         dictionary['__class__'] = self.__class__.__name__
         dictionary['created_at'] = self.created_at.isoformat()
-        dictionary['updated_at'] = self.updated_at.isoformat()
+        dictionary['updated_at'] = s
         """ _sa_instance """
         dictionary.pop('_sa_instance_state', None)
         return (dictionary)

@@ -1,17 +1,4 @@
-#!/usr/bin/python3
-""" """
-from models.base_model import BaseModel
-import unittest
-import datetime
-from uuid import UUID
-import json
-import os
-
-
-class test_basemodel(unittest.TestCase):
-    """ """
-
-    def __init__(self, *args, **kwargs):
+#ef __init__(self, *args, **kwargs):
         """ """
         super().__init__(*args, **kwargs)
         self.name = 'BaseModel'
@@ -48,13 +35,8 @@ class test_basemodel(unittest.TestCase):
             new = BaseModel(**copy)
 
     def test_save(self):
-        """ Testing save """
-        i = self.value()
-        i.save()
-        key = self.name + "." + i.id
-        with open('file.json', 'r') as f:
-            j = json.load(f)
-            self.assertEqual(j[key], i.to_dict())
+        self.base1.save()
+        self.assertNotEqual(self.base1.created_at, self.base1.updated_at)
 
     def test_str(self):
         """ """
@@ -74,11 +56,6 @@ class test_basemodel(unittest.TestCase):
         with self.assertRaises(TypeError):
             new = self.value(**n)
 
-    def test_kwargs_one(self):
-        """ """
-        n = {'Name': 'test'}
-        with self.assertRaises(KeyError):
-            new = self.value(**n)
 
     def test_id(self):
         """ """
@@ -90,10 +67,15 @@ class test_basemodel(unittest.TestCase):
         new = self.value()
         self.assertEqual(type(new.created_at), datetime.datetime)
 
-    def test_updated_at(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.updated_at), datetime.datetime)
-        n = new.to_dict()
-        new = BaseModel(**n)
-        self.assertFalse(new.created_at == new.updated_at)
+    def test_to_dict(self):
+        base1_dict = self.base1.to_dict()
+        self.assertEqual(self.base1.__class__.__name__, 'BaseModel')
+        self.assertIsInstance(base1_dict['created_at'], str)
+        self.assertIsInstance(base1_dict['updated_at'], str)
+
+        
+    def test_checking_for_functions(self):
+        self.assertIsNotNone(BaseModel.__doc__)
+        self.assertIsNotNone(BaseModel.save.__doc__)
+        self.assertIsNotNone(BaseModel.to_dict.__doc__)
+

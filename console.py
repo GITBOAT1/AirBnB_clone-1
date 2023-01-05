@@ -1,15 +1,19 @@
 #!/usr/bin/python3
 """ Console Module """
-import cmd
-import sys
+from models.engine.db_storage import DBStorage
+from models.engine.file_storage import FileStorage
 from models.base_model import BaseModel
-from models.__init__ import storage
 from models.user import User
 from models.place import Place
 from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+import cmd
+import json
+import models
+import shlex
+import sys
 
 
 class HBNBCommand(cmd.Cmd):
@@ -33,7 +37,7 @@ class HBNBCommand(cmd.Cmd):
     def preloop(self):
         """Prints if isatty is false"""
         if not sys.__stdin__.isatty():
-            print('(hbnb)')
+            print('(hbnb) ', end='')
 
     def precmd(self, line):
         """Reformat command line for advanced command syntax.
@@ -73,8 +77,8 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is'}'\
-                            and type(eval(pline)) is dict:
+                    if pline[0] == '{' and pline[-1] == '}'\
+                            and type(eval(pline)) == dict:
                         _args = pline
                     else:
                         _args = pline.replace(',', '')
@@ -104,7 +108,7 @@ class HBNBCommand(cmd.Cmd):
         """ Handles EOF to exit program """
         print()
         exit()
-
+        
     def help_EOF(self):
         """ Prints the help documentation for EOF """
         print("Exits the program without formatting\n")
@@ -118,6 +122,8 @@ class HBNBCommand(cmd.Cmd):
         if not args:
             print("** class name missing **")
             return
+        """" improvemet for this function 
+
         elif args not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
@@ -125,6 +131,28 @@ class HBNBCommand(cmd.Cmd):
         storage.save()
         print(new_instance.id)
         storage.save()
+
+        end """
+        
+        args = shlex.split(args)
+        if args[0] in HBNBCommand.classes:
+            new_instance = HBNBCommand.classes[args[0]]()
+            for arg in args[1:]:
+                key = arg.split("=")[0]
+                val = arg.split("=")[1].replace('_', ' ')
+                try:
+                    int(val)
+                except:
+                    pass
+                try:
+                    float(val)
+                except:
+                    pass
+                setattr(new_instance, key, val)
+            new_instance.save()
+            print(new_instance.id)
+        else:
+            print("** class doesn't exist **")
 
     def help_create(self):
         """ Help information for the create method """
@@ -199,14 +227,17 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, args):
         """ Shows all objects, or all objects of a class"""
+        
         print_list = []
+        models.storage.reload()
+        objects = models.storage.all()
 
         if args:
             args = args.split(' ')[0]  # remove possible trailing args
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage._FileStorage__objects.items():
+            for k, v in objects.items():
                 if k.split('.')[0] == args:
                     print_list.append(str(v))
         else:
@@ -272,7 +303,7 @@ class HBNBCommand(cmd.Cmd):
                 args.append(v)
         else:  # isolate args
             args = args[2]
-            if args and args[0] is '\"':  # check for quoted arg
+            if args and args[0] == '\"':  # check for quoted arg
                 second_quote = args.find('\"', 1)
                 att_name = args[1:second_quote]
                 args = args[second_quote + 1:]
@@ -280,10 +311,10 @@ class HBNBCommand(cmd.Cmd):
             args = args.partition(' ')
 
             # if att_name was not quoted arg
-            if not att_name and args[0] is not ' ':
+            if not att_name and args[0] != ' ':
                 att_name = args[0]
             # check for quoted val arg
-            if args[2] and args[2][0] is '\"':
+            if args[2] and args[2][0] == '\"':
                 att_val = args[2][1:args[2].find('\"', 1)]
 
             # if att_val was not quoted arg
