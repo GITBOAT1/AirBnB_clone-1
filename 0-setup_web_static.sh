@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 # Configured nginx server for custom header
-sudo apt-get -y install nginx
-sudo mkdir -p /data/web_static/releases/test/
-sudo mkdir -p /data/web_static/shared/
-echo " ALX School" | sudo tee /data/web_static/releases/test/index.html
+sudo pkill -f nginx & wait $!
+
+#check if ngix is installed
+dpkg -s nginx &> /dev/null
+if [ $? -ne 0 ]  
+then                                                                                              
+    sudo apt-get -y install nginx
+fi
+[ -d /data/web_static/release/test/ ] || sudo mkdir -p /data/web_static/releases/test/
+[ -d /data/web_static/release/shared ] || sudo mkdir -p /data/web_static/shared/
+echo "Holberton School" | sudo tee /data/web_static/releases/test/index.html
 sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 sudo chown -R ubuntu:ubuntu /data/
 FILE=/etc/nginx/sites-available/default
