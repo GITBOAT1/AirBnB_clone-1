@@ -5,7 +5,7 @@ from datetime import datetime
 import os
 
 env.user = 'ubuntu'
-env.hosts = ['35.237.95.74', '35.185.23.42']
+env.hosts = ['54.237.3.197', '54.152.230.84']
 
 
 def do_pack():
@@ -18,13 +18,13 @@ def do_pack():
     size = os.stat("versions/{}".format(name)).st_size
     print("web_static packed: versions/{} -> {}".format(name, size))
     path = "versions/{}".format(name)
-    return(path)
+    return (path)
 
 
 def do_deploy(archive_path):
 
     if not archive_path:
-        return(False)
+        return (False)
     name = archive_path.split('/')[1]
     try:
         put(archive_path, '/tmp/')
@@ -40,9 +40,9 @@ def do_deploy(archive_path):
         run("ln -s /data/web_static/releases/{}/ /data/web_static/current"
             .format(name))
         print("New version deployed")
-        return(True)
+        return (True)
     except BaseException:
-        return(False)
+        return (False)
 
 
 def deploy():
@@ -50,8 +50,9 @@ def deploy():
     try:
         path = do_pack()
     except BaseException:
-        return(False)
+        return (False)
     do_deploy(path)
+
 
 def do_clean(number=0):
 

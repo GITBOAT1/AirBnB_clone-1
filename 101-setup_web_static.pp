@@ -1,5 +1,3 @@
-
-
 #create a file holberton
 
 package { 'nginx':

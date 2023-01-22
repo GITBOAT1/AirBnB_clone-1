@@ -3,7 +3,6 @@
 from fabric.api import local, run, prefix, env
 from datetime import datetime
 import os
-
 env.hosts = ['localhost']
 
 
