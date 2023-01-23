@@ -15,7 +15,7 @@ def do_pack():
     local("tar -cvzf versions/{} web_static".format(name))
     size = os.stat("versions/{}".format(name)).st_size
     local('chmod 664 ./versions/{}'.format(name))  
-    print("web_static packed: versions/{} -> {}".format(name, size))
+    print("web_static packed: versions/{} -> {}Bytes".format(name, size))
 
     path = './versions/' + name
     if os.path.exists(path):
