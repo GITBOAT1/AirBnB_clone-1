@@ -9,13 +9,14 @@ env.hosts = ['54.237.3.197', '54.152.230.84']
 
 
 def do_pack():
-    '''Packes web_static in tgz format'''
+    """ Packes web_static in tgz format
+    """
 
     n = datetime.now()
     name = "web_static_{}{}{}{}{}{}.tgz".format(
         n.year, n.month, n.day, n.hour, n.minute, n.second)
-    local('mkdir -p versions')
-    local("tar -cvzf versions/{} web_static".format(name))
+    local('sudo mkdir -p versions')
+    local("sudo tar -cvzf versions/{} web_static --mode=664".format(name))
     size = os.stat("versions/{}".format(name)).st_size
     print("web_static packed: versions/{} -> {}".format(name, size))
     path = "versions/{}".format(name)
