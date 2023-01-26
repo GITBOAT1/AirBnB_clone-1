@@ -6,7 +6,7 @@ import os
 
 
 env.user = 'ubuntu'
-env.hosts = ['35.237.95.74', '35.185.23.42']
+env.hosts = ['54.237.3.197', '54.152.230.84']
 
 
 def do_pack():
@@ -15,8 +15,8 @@ def do_pack():
     name = "web_static_{}{}{}{}{}{}.tgz".format(n.year, n.month,
                                                 n.day, n.hour,
                                                 n.minute, n.second)
-    local('mkdir -p versions')
-    local("tar -cvzf versions/{} web_static".format(name))
+    local('sudo mkdir -p versions')
+    local("sudo tar -cvzf versions/{} web_static".format(name))
     size = os.stat("versions/{}".format(name)).st_size
     print("web_static packed: versions/{} -> {}".format(name, size))
 
