@@ -5,11 +5,12 @@ from datetime import datetime
 import os
 
 env.user = 'ubuntu'
-env.hosts = ['35.237.95.74', '35.185.23.42']
+env.hosts = ['54.237.3.197', '54.152.230.84']
 
 
 def do_pack():
     '''Packes web_static in tgz format'''
+
     n = datetime.now()
     name = "web_static_{}{}{}{}{}{}.tgz".format(
         n.year, n.month, n.day, n.hour, n.minute, n.second)
@@ -22,6 +23,9 @@ def do_pack():
 
 
 def do_deploy(archive_path):
+    """ distributes an archive to your web servers,
+        using the function do_deploy:
+    """
 
     if not archive_path:
         return (False)
@@ -46,6 +50,9 @@ def do_deploy(archive_path):
 
 
 def deploy():
+    """ distributes an archive to your web servers,
+        using the function do_deploy:
+    """
 
     try:
         path = do_pack()

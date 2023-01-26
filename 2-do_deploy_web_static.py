@@ -23,6 +23,7 @@ def do_pack():
 
 def do_deploy(archive_path):
     """ distributes an archive to your web servers, using the function """
+
     if not archive_path:
         return (False)
     name = archive_path.split('/')[1]
