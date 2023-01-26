@@ -9,7 +9,9 @@ env.hosts = ['54.237.3.197', '54.152.230.84']
 
 
 def do_pack():
-    '''Packes web_static in tgz format'''
+    """ Packes web_static in tgz format
+    """
+
     n = datetime.now()
     name = "web_static_{}{}{}{}{}{}.tgz".format(
         n.year, n.month, n.day, n.hour, n.minute, n.second)
@@ -22,22 +24,23 @@ def do_pack():
 
 
 def do_deploy(archive_path):
+    """ Deploy Archeve """
 
     if not archive_path:
         return (False)
     name = archive_path.split('/')[1]
     try:
         put(archive_path, '/tmp/')
-        run("mkdir -p /data/web_static/releases/{}".format(name))
-        run("tar -xzf /tmp/{} -C /data/web_static/releases/{}"
+        run(" sudo mkdir -p /data/web_static/releases/{}".format(name))
+        run("sudo tar -xzf /tmp/{} -C /data/web_static/releases/{}"
             .format(name, name))
-        run("rm /tmp/{}".format(name))
-        run("mv /data/web_static/releases/{}/web_static/*\
+        run("sudo rm /tmp/{}".format(name))
+        run("sudo mv /data/web_static/releases/{}/web_static/*\
         /data/web_static/releases/{}".format(name, name))
-        run("rm -rf /data/web_static/releases/{}/web_static"
+        run("sudo rm -rf /data/web_static/releases/{}/web_static"
             .format(name))
-        run("rm -rf /data/web_static/current")
-        run("ln -s /data/web_static/releases/{}/ /data/web_static/current"
+        run("sudo rm -rf /data/web_static/current")
+        run("sudo ln -s /data/web_static/releases/{}/ /data/web_static/current"
             .format(name))
         print("New version deployed")
         return (True)
@@ -46,7 +49,7 @@ def do_deploy(archive_path):
 
 
 def deploy():
-
+    """ Deploy achive """
     try:
         path = do_pack()
     except BaseException:
@@ -55,6 +58,8 @@ def deploy():
 
 
 def do_clean(number=0):
+    """ deletes out-of-date archives, using the function
+    """
 
     if number == 0 or number == 1:
         with cd.local('./versions/'):
