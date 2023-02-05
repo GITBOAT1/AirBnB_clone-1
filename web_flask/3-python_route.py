@@ -20,7 +20,13 @@ def hbnb():
 
 @app.route('/c/<text>')
 def c_is_fun(text):
-    return('C %s' % text.replace("_", " "))
+    return ('C %s' % text.replace("_", " "))
+
+
+@app.route('/python', defaults={'text': 'is cool'})
+@app.route('/python/<text>')
+def python_is_cool(text):
+    return('Python %s' % text.replace("_", " "))
 
 
 if __name__ == "__main__":
