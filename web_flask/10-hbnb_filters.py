@@ -3,8 +3,9 @@
 from flask import Flask, render_template
 from models import storage
 
+
 app = Flask(__name__)
-app.url_map.strict_slashes=False
+app.url_map.strict_slashes = False
 
 
 @app.route('/states')
@@ -19,7 +20,15 @@ def display_by_id(id):
     for obj in storage.all("State").values():
         if obj.id == id:
             state_obj = obj
-    return render_template('9-states.html', storage=storage.all('State'), state_obj=state_obj)
+    return render_template('9-states.html', storage=storage.all('State'),
+                           state_obj=state_obj)
+
+
+@app.route('/hbnb_filters')
+def display_filters():
+    return render_template('10-hbnb_filters.html',
+                           storage=storage.all('State'),
+                           amenity=storage.all('Amenity'))
 
 
 @app.teardown_appcontext
